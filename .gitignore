@@ -1,6 +1,5 @@
 node_modules
 .gemini
 main.js
-
-# Build artifacts
+data.json
 obsidian-mermaid-exporter.zip

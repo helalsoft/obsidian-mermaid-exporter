@@ -1,8 +1,9 @@
 import { App, Modal, Notice, Plugin, PluginSettingTab, Setting, TFile, MarkdownRenderer, normalizePath, MarkdownView } from 'obsidian';
+import { jsPDF } from 'jspdf';
 
 interface MermaidExporterSettings {
 	imageScale: number;
-	format: 'png' | 'svg';
+	format: 'png' | 'svg' | 'pdf';
     autoOpen: boolean;
     overwrite: boolean;
 }
@@ -221,7 +222,7 @@ export default class MermaidExporter extends Plugin {
             if (this.settings.format === 'svg') {
                 buffer = Buffer.from(svgData);
             } else {
-                // Convert to PNG
+                // Convert to PNG or PDF via Canvas
                 const canvas = document.createElement('canvas');
                 canvas.width = width * scale;
                 canvas.height = height * scale;
@@ -247,9 +248,20 @@ export default class MermaidExporter extends Plugin {
                         img.src = dataUri;
                     });
 
-                    const dataUrl = canvas.toDataURL('image/png');
-                    const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
-                    buffer = Buffer.from(base64Data, 'base64');
+                    if (this.settings.format === 'pdf') {
+                        const pdf = new jsPDF({
+                            orientation: width > height ? 'l' : 'p',
+                            unit: 'px',
+                            format: [width * scale, height * scale]
+                        });
+                        pdf.addImage(canvas, 'PNG', 0, 0, width * scale, height * scale);
+                        const pdfArrayBuffer = pdf.output('arraybuffer');
+                        buffer = Buffer.from(pdfArrayBuffer);
+                    } else {
+                        const dataUrl = canvas.toDataURL('image/png');
+                        const base64Data = dataUrl.replace(/^data:image\/png;base64,/, "");
+                        buffer = Buffer.from(base64Data, 'base64');
+                    }
                 }
             }
 
@@ -282,7 +294,7 @@ export default class MermaidExporter extends Plugin {
                 const result = await dialog.showSaveDialog({
                     defaultPath: defaultFileName,
                     filters: [
-                        { name: 'Images', extensions: [this.settings.format] }
+                        { name: this.settings.format.toUpperCase(), extensions: [this.settings.format] }
                     ]
                 });
 
@@ -498,9 +510,10 @@ class MermaidExporterSettingTab extends PluginSettingTab {
             .addDropdown(dropdown => dropdown
                 .addOption('png', 'PNG')
                 .addOption('svg', 'SVG')
+                .addOption('pdf', 'PDF')
                 .setValue(this.plugin.settings.format)
                 .onChange(async (value) => {
-                    this.plugin.settings.format = value as 'png' | 'svg';
+                    this.plugin.settings.format = value as 'png' | 'svg' | 'pdf';
                     await this.plugin.saveSettings();
                 }));
 

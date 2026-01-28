@@ -6,7 +6,7 @@ Export your Mermaid diagrams from Obsidian notes to high-quality PNG or SVG file
 
 - **Bulk Export**: Find and export all Mermaid diagrams within your active note at once.
 - **Selective Export**: Choose exactly which diagrams you want to save using a selection modal.
-- **Multiple Formats**: Support for both **PNG** and **SVG** output.
+- **Multiple Formats**: Support for **PNG**, **SVG**, and **PDF** output.
 - **High Quality**: Adjustable image scale for PNG exports to ensure crisp diagrams even at large sizes.
 - **Theme Integration**: Automatically detects and applies your Obsidian theme's font to the exported diagrams for a consistent look.
 - **Easy Access**: 
@@ -30,7 +30,7 @@ Export your Mermaid diagrams from Obsidian notes to high-quality PNG or SVG file
 Go to `Settings` > `Mermaid Exporter` to customize the plugin behavior:
 
 - **Image Scale**: Set the scale factor for PNG exports (1 to 10). Higher values result in better quality but larger file sizes.
-- **Output Format**: Toggle between **PNG** and **SVG**.
+- **Output Format**: Choose between **PNG**, **SVG**, and **PDF**.
 - **Auto Open File**: When enabled, the plugin will automatically open the image (or folder for bulk exports) using your system's default viewer after saving.
 - **Overwrite Existing Files**: If enabled, files with the same name will be overwritten without confirmation.
 

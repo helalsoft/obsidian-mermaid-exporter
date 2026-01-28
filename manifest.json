@@ -1,7 +1,7 @@
 {
 	"id": "obsidian-mermaid-exporter",
 	"name": "Mermaid Exporter",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "0.15.0",
 	"description": "Export Mermaid diagrams from your notes.",
 	"author": "Helalsoft",
